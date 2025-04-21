@@ -12,10 +12,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Simulando Continuos Delivery
-        uses: actions/uploaded-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: projetozipado.zip
           path: |
             main.py
             README.md
-
