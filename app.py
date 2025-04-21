@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 tarefas = []
 
-def calc(peso: float, altura: float):
+def calc_imc(peso: float, altura: float):
     imc = peso / (altura * altura)
     return round(imc, 2)
 
@@ -34,7 +34,7 @@ def calcular_imc():
         return jsonify({'erro': 'Peso e altura são obrigatórios.'}), 400
     
     try:
-        imc = calc(float(peso), float(altura))
+        imc = calc_imc(float(peso), float(altura))
         return jsonify({'imc': imc})
     except Exception as e:
         return jsonify({'erro': str(e)}), 400
