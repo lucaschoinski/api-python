@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+
 tarefas = []
 
 def calc(peso: float, altura: float):
