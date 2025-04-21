@@ -8,6 +8,11 @@ def calc_imc(peso: float, altura: float):
     imc = peso / (altura * altura)
     return round(imc, 2)
 
+def calc_tmb(perfil: str, peso: float, altura: float, idade: float):
+    if perfil == "H":
+        tmb = 88.362 + (13.397 * peso) + (4.799 * altura) - (5.677 * idade)
+        return tmb
+
 @app.route('/')
 def home():
     return 'Bem-vindo à API de tarefas!'
