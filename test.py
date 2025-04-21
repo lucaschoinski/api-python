@@ -2,8 +2,6 @@ import requests
 
 url = "http://127.0.0.1:5000"
 
-url = "http://127.0.0.1:5000/imc"
-
 body_imc = {
     "peso": "50",
     "altura": "1.70"
