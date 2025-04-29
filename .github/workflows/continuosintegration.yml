@@ -18,10 +18,10 @@ jobs:
           linter: pylint
 
       - name: Upload Lint Report as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # Versão v2 usada aqui
         with:
           name: pylint-report
-          path: pylint-report.txt  # Altere o caminho conforme o arquivo gerado pelo pylint ou outro processo
+          path: pylint-report.txt  # Ajuste conforme necessário
 
   docker:
     runs-on: ubuntu-latest
