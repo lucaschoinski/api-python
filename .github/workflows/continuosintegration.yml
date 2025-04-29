@@ -23,6 +23,7 @@ jobs:
           name: pylint-report
           path: pylint-report.txt  # Ajuste conforme necessário
 
+          
   docker:
     runs-on: ubuntu-latest
     steps:
