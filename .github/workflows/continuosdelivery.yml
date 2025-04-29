@@ -59,6 +59,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+        
       - name: Send Discord message
         uses: Sniddl/discord-commits@v1.6
         with:
