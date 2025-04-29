@@ -61,9 +61,13 @@ jobs:
 
 
       - name: Send Discord message
-        uses: Sniddl/discord-commits@v1.6
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}  # Corrigi aqui também
-          template: "avatar-with-link"
-          include-extras: true
-          message: "teste, deu certo"
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"content": "teste direto"}' \
+          ${{ secrets.DISCORD_WEBHOOK }}
+        # uses: Sniddl/discord-commits@v1.6
+        # with:
+        #   webhook: ${{ secrets.DISCORD_WEBHOOK }}  # Corrigi aqui também
+        #   template: "avatar-with-link"
+        #   include-extras: true
+        #   message: "teste, deu certo"
