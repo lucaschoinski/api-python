@@ -1,33 +1,73 @@
-import requests
+import pytest
+from flask import Flask
+from app import app  # Supondo que o código da API esteja no arquivo `app.py`
 
-url = "http://127.0.0.1:5000"
+@pytest.fixture
+def client():
+    with app.test_client() as client:
+        yield client
 
-body_imc = {
-    "peso": "50",
-    "altura": "1.70"
-}
+# Teste 1: Testar o cálculo do IMC
+def test_calcular_imc(client):
+    body_imc = {
+        "peso": "70",
+        "altura": "1.75"
+    }
+    
+    response = client.post('/imc', json=body_imc)
+    
+    assert response.status_code == 200
+    assert 'imc' in response.json
+    assert response.json['imc'] == 22.86  # Calculando manualmente o IMC: 70 / (1.75 * 1.75)
 
-body_tmb = {
-    "perfil": "H",
-    "peso": "50",
-    "altura": "1.60",
-    "idade": "45"
-}
+# Teste 2: Testar o cálculo de TMB para o perfil masculino
+def test_calcular_tmb_masculino(client):
+    body_tmb = {
+        "perfil": "H",
+        "peso": "70",
+        "altura": "1.75",
+        "idade": "30"
+    }
+    
+    response = client.post('/tmb', json=body_tmb)
+    
+    assert response.status_code == 200
+    assert 'tmb' in response.json
+    # Calculando manualmente a TMB para um homem: 88.362 + (13.397 * 70) + (4.799 * 1.75) - (5.677 * 30)
+    assert response.json['tmb'] == 1742.057
 
-# Envia a requisição POST com o JSON
-resposta_tmb = requests.post(url + '/tmb', json=body_tmb)
-# Envia a requisição POST com o JSON
-resposta_imc = requests.post(url + '/imc', json=body_imc)
+# Teste 3: Testar a ausência de dados no IMC
+def test_calcular_imc_erro(client):
+    body_imc = {
+        "peso": "70"
+        # Falta a altura
+    }
+    
+    response = client.post('/imc', json=body_imc)
+    
+    assert response.status_code == 400
+    assert 'erro' in response.json
+    assert response.json['erro'] == 'Peso e altura são obrigatórios.'
 
-# Verifica se a requisição foi bem-sucedida
-if resposta_imc.status_code == 200:
-    print('IMC calculado:', resposta_imc.json()['imc'])
-else:
-    print('Erro:', resposta_imc.json())
+# Teste 4: Testar a ausência de dados no TMB
+def test_calcular_tmb_erro(client):
+    body_tmb = {
+        "peso": "70",
+        "altura": "1.75",
+        "idade": "30"
+        # Falta o perfil
+    }
+    
+    response = client.post('/tmb', json=body_tmb)
+    
+    assert response.status_code == 400
+    assert 'erro' in response.json
+    assert response.json['erro'] == 'Peso, altura, idade e perfil (H ou M) são obrigatórios.'
 
-if resposta_tmb.status_code == 200:
-    print('TMB calculado:', resposta_tmb.json()['tmb'])
-else:
-    print('Erro:', resposta_tmb.json())
-
-
+# Teste 5: Testar a resposta de requisição inválida (método GET) para um endpoint POST
+def test_metodo_invalido(client):
+    response = client.get('/imc')
+    
+    assert response.status_code == 405  # Método não permitido
+    assert 'erro' in response.json
+    assert response.json['erro'] == 'Method Not Allowed'
