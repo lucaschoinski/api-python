@@ -53,6 +53,7 @@ jobs:
         
   discord:
     runs-on: ubuntu-latest
+    environment: My Environment
     needs: [deliver, deploy, docker]  # espera todos os anteriores
     steps:
       - name: Checkout repository
