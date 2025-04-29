@@ -9,6 +9,11 @@ jobs:
   deliver: 
     runs-on: ubuntu-latest
     steps:
+      # Limpeza do cache para evitar conflitos
+      - name: Clear GitHub Actions Cache
+        run: |
+          rm -rf ~/.cache
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
